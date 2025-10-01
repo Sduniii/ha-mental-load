@@ -19,12 +19,14 @@ from .const import (
     CONF_HOUSEHOLD_CONTEXT,
     CONF_MODEL,
     CONF_POLL_INTERVAL,
+    CONF_PROVIDER,
     CONF_TIME_HORIZON,
     DATA_COORDINATOR,
     DATA_MANAGER,
     DATA_UNSUB_UPDATE_LISTENER,
     DEFAULT_MODEL,
     DEFAULT_POLL_INTERVAL,
+    DEFAULT_PROVIDER,
     DEFAULT_TIME_HORIZON,
     DOMAIN,
     SERVICE_ADD_TASK,
@@ -51,6 +53,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     session = aiohttp_client.async_get_clientsession(hass)
 
     model = _get_entry_option(entry, CONF_MODEL, DEFAULT_MODEL)
+    provider = _get_entry_option(entry, CONF_PROVIDER, DEFAULT_PROVIDER)
     poll_interval = _get_entry_option(entry, CONF_POLL_INTERVAL, DEFAULT_POLL_INTERVAL)
     time_horizon = _get_entry_option(entry, CONF_TIME_HORIZON, DEFAULT_TIME_HORIZON)
 
@@ -58,6 +61,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         session=session,
         api_key=entry.data.get(CONF_API_KEY),
         model=model,
+        provider=provider,
     )
 
     manager = MentalLoadTaskManager(

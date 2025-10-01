@@ -10,10 +10,15 @@ DOMAIN = "mental_load_assistant"
 
 CONF_CALENDARS = "calendars"
 CONF_MODEL = "model"
+CONF_PROVIDER = "provider"
 CONF_POLL_INTERVAL = "poll_interval"
 CONF_TIME_HORIZON = "time_horizon"
 
 DEFAULT_MODEL = "gpt-4o-mini"
+DEFAULT_PROVIDER = "openai"
+
+PROVIDER_OPENAI = "openai"
+PROVIDER_GEMINI = "gemini"
 DEFAULT_POLL_INTERVAL = timedelta(minutes=15)
 DEFAULT_TIME_HORIZON = timedelta(days=14)
 

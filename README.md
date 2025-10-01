@@ -15,11 +15,20 @@ Dieses Projekt stellt eine benutzerdefinierte Home-Assistant-Integration bereit,
 1. Kopiere den Ordner `custom_components/mental_load_assistant` in dein Home-Assistant-Konfigurationsverzeichnis.
 2. Starte Home Assistant neu.
 3. Öffne *Einstellungen → Geräte & Dienste → Integration hinzufügen* und suche nach **Mental Load Assistant**.
-4. Wähle die Kalender aus, die analysiert werden sollen. Optional kann ein OpenAI-kompatibler API-Schlüssel und ein Modellname hinterlegt werden.
+4. Wähle die Kalender aus, die analysiert werden sollen. Optional kann ein KI-Anbieter (OpenAI oder Google Gemini), ein API-Schlüssel und ein Modellname hinterlegt werden.
+
+### Installation über HACS
+
+1. Öffne HACS in Home Assistant und wähle **Integrationen**.
+2. Klicke rechts oben auf die drei Punkte und wähle **Benutzerdefiniertes Repository**.
+3. Gib die URL dieses GitHub-Repositories an und wähle als Kategorie **Integration**.
+4. Nach dem Hinzufügen erscheint *Mental Load Assistant* als installierbare Integration in HACS. Installiere sie und starte Home Assistant neu.
+5. Richte die Integration anschließend wie oben beschrieben ein.
 
 ## Optionen
 
-- **Modell**: Name des Chat-Modells (Standard: `gpt-4o-mini`).
+- **KI-Anbieter**: Auswahl zwischen OpenAI (Standard) und Google Gemini. Für Gemini wird ein API-Schlüssel von Google AI Studio benötigt.
+- **Modell**: Name des Chat-Modells (Standard: `gpt-4o-mini` für OpenAI bzw. `gemini-1.5-flash` als bewährter Startpunkt für Gemini).
 - **Abfrageintervall**: Wie oft Kalender synchronisiert werden.
 - **Zeithorizont**: Zeitraum in die Zukunft, der aus dem Kalender analysiert wird.
 
@@ -37,7 +46,7 @@ data:
 
 ## Hinweise zur KI-Nutzung
 
-- Die Integration verwendet die OpenAI-kompatible Chat-Completions-API. Der API-Schlüssel wird serverseitig gespeichert und ausschließlich für die Aufgabengenerierung genutzt.
+- Die Integration unterstützt sowohl die OpenAI-kompatible Chat-Completions-API als auch die Google-Gemini-`generateContent`-API. API-Schlüssel werden ausschließlich zur Aufgabengenerierung genutzt.
 - Ohne gültigen Schlüssel oder bei Kommunikationsproblemen werden sinnvolle Standard-Aufgaben erzeugt, damit die Liste nutzbar bleibt.
 - Die erzeugten Aufgaben enthalten zusätzliche Metadaten (Quelle, Elternaufgabe, Mental-Load-Notizen) und können wie jede andere To-do-Liste in Home Assistant verwendet werden.
 
