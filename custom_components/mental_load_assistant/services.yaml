@@ -31,3 +31,18 @@ add_manual_task:
       required: false
       selector:
         text:
+mark_task_in_progress:
+  name: Aufgabe als "In Bearbeitung" markieren
+  description: Setzt einen To-do-Eintrag (Eltern- oder Unteraufgabe) in den Status "In Bearbeitung".
+  fields:
+    uid:
+      description: Die UID des To-dos, wie in der Liste angezeigt.
+      example: 5b3c9ef6-6a7d-4c55-9d60-6b66d1c95f44
+      required: true
+      selector:
+        text:
+    entry_id:
+      description: Optionale Config-Entry-ID, falls mehrere Instanzen vorhanden sind.
+      required: false
+      selector:
+        text:

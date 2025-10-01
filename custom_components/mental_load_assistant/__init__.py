@@ -30,6 +30,7 @@ from .const import (
     DEFAULT_TIME_HORIZON,
     DOMAIN,
     SERVICE_ADD_TASK,
+    SERVICE_MARK_IN_PROGRESS,
 )
 from .coordinator import MentalLoadCoordinator
 from .task_manager import MentalLoadTaskManager
@@ -125,52 +126,89 @@ async def async_update_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
 def _register_services(hass: HomeAssistant) -> None:
     """Register integration level services."""
 
-    if hass.services.has_service(DOMAIN, SERVICE_ADD_TASK):
-        return
-
-    service_schema = vol.Schema(
-        {
-            vol.Optional("entry_id"): cv.string,
-            vol.Required("summary"): cv.string,
-            vol.Optional("description"): cv.string,
-            vol.Optional("due"): vol.Any(cv.datetime, cv.string),
-            vol.Optional(CONF_HOUSEHOLD_CONTEXT): cv.string,
-        }
-    )
-
-    async def _async_handle_add_task(call: ServiceCall) -> None:
-        entry_id = call.data.get("entry_id")
-        manager: MentalLoadTaskManager | None = None
-
-        if entry_id:
-            entry_data = hass.data.get(DOMAIN, {}).get(entry_id)
-            if entry_data:
-                manager = entry_data.get(DATA_MANAGER)
-        else:
-            # Pick the first available manager if only one integration is configured
-            if len(hass.data.get(DOMAIN, {})) == 1:
-                manager = next(iter(hass.data[DOMAIN].values())).get(DATA_MANAGER)
-
-        if not manager:
-            _LOGGER.error("No Mental Load integration instance available for service call")
-            return
-
-        await manager.async_create_manual_entry(
-            summary=call.data["summary"],
-            description=call.data.get("description"),
-            due=call.data.get("due"),
-            household_context=call.data.get(CONF_HOUSEHOLD_CONTEXT),
+    if not hass.services.has_service(DOMAIN, SERVICE_ADD_TASK):
+        service_schema = vol.Schema(
+            {
+                vol.Optional("entry_id"): cv.string,
+                vol.Required("summary"): cv.string,
+                vol.Optional("description"): cv.string,
+                vol.Optional("due"): vol.Any(cv.datetime, cv.string),
+                vol.Optional(CONF_HOUSEHOLD_CONTEXT): cv.string,
+            }
         )
 
-    hass.services.async_register(
-        DOMAIN,
-        SERVICE_ADD_TASK,
-        _async_handle_add_task,
-        schema=service_schema,
-    )
+        async def _async_handle_add_task(call: ServiceCall) -> None:
+            entry_id = call.data.get("entry_id")
+            manager: MentalLoadTaskManager | None = None
+
+            if entry_id:
+                entry_data = hass.data.get(DOMAIN, {}).get(entry_id)
+                if entry_data:
+                    manager = entry_data.get(DATA_MANAGER)
+            else:
+                # Pick the first available manager if only one integration is configured
+                if len(hass.data.get(DOMAIN, {})) == 1:
+                    manager = next(iter(hass.data[DOMAIN].values())).get(DATA_MANAGER)
+
+            if not manager:
+                _LOGGER.error(
+                    "No Mental Load integration instance available for service call"
+                )
+                return
+
+            await manager.async_create_manual_entry(
+                summary=call.data["summary"],
+                description=call.data.get("description"),
+                due=call.data.get("due"),
+                household_context=call.data.get(CONF_HOUSEHOLD_CONTEXT),
+            )
+
+        hass.services.async_register(
+            DOMAIN,
+            SERVICE_ADD_TASK,
+            _async_handle_add_task,
+            schema=service_schema,
+        )
+
+    if not hass.services.has_service(DOMAIN, SERVICE_MARK_IN_PROGRESS):
+        progress_schema = vol.Schema(
+            {
+                vol.Optional("entry_id"): cv.string,
+                vol.Required("uid"): cv.string,
+            }
+        )
+
+        async def _async_handle_mark_in_progress(call: ServiceCall) -> None:
+            entry_id = call.data.get("entry_id")
+            manager: MentalLoadTaskManager | None = None
+
+            if entry_id:
+                entry_data = hass.data.get(DOMAIN, {}).get(entry_id)
+                if entry_data:
+                    manager = entry_data.get(DATA_MANAGER)
+            else:
+                if len(hass.data.get(DOMAIN, {})) == 1:
+                    manager = next(iter(hass.data[DOMAIN].values())).get(DATA_MANAGER)
+
+            if not manager:
+                _LOGGER.error(
+                    "No Mental Load integration instance available for service call"
+                )
+                return
+
+            await manager.async_mark_in_progress(call.data["uid"])
+
+        hass.services.async_register(
+            DOMAIN,
+            SERVICE_MARK_IN_PROGRESS,
+            _async_handle_mark_in_progress,
+            schema=progress_schema,
+        )
 
 
 def _unregister_services(hass: HomeAssistant) -> None:
     """Remove registered services if no instances remain."""
     if hass.services.has_service(DOMAIN, SERVICE_ADD_TASK):
         hass.services.async_remove(DOMAIN, SERVICE_ADD_TASK)
+    if hass.services.has_service(DOMAIN, SERVICE_MARK_IN_PROGRESS):
+        hass.services.async_remove(DOMAIN, SERVICE_MARK_IN_PROGRESS)

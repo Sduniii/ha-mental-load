@@ -7,6 +7,7 @@ Dieses Projekt stellt eine benutzerdefinierte Home-Assistant-Integration bereit,
 - **Kalender-Analyse**: Überwachte Kalender (Google, Microsoft, lokale Kalender usw.) werden regelmäßig abgefragt. Jeder Termin wird per KI analysiert und in konkrete To-dos zerlegt.
 - **Manuelle Aufgaben**: Eigene Einträge lassen sich direkt in der To-do-Liste oder per Service hinzufügen. Auch diese Aufgaben werden automatisch in Unteraufgaben aufgeteilt.
 - **Mental-Load-Bewertung**: Für jede Aufgabe werden Hinweise zur mentalen Belastung sowie optionale Notizen bereitgestellt.
+- **Fortschrittsstatus**: Aufgaben können als "In Bearbeitung" markiert werden, um laufende Arbeiten hervorzuheben.
 - **Fallback ohne API-Schlüssel**: Falls kein KI-Dienst konfiguriert ist oder der Aufruf fehlschlägt, greift eine nachvollziehbare Heuristik zur Generierung der Teilaufgaben.
 - **Service-Aufrufe**: Über `mental_load_assistant.add_manual_task` können Aufgaben samt Kontext (Beschreibung, Fälligkeitsdatum, Haushaltsinformationen) per Automatisierung hinzugefügt werden.
 
@@ -42,6 +43,13 @@ data:
   description: "Wechselrichter zeigt Fehlercode an"
   due: "2024-07-01T18:00:00+02:00"
   household_context: "Eigenheim mit PV-Anlage"
+```
+
+```yaml
+domain: mental_load_assistant
+service: mark_task_in_progress
+data:
+  uid: "5b3c9ef6-6a7d-4c55-9d60-6b66d1c95f44"
 ```
 
 ## Hinweise zur KI-Nutzung

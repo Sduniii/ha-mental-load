@@ -4,7 +4,11 @@ from __future__ import annotations
 
 from typing import Any
 
-from homeassistant.components.todo import TodoItem, TodoListEntity
+from homeassistant.components.todo import (
+    TodoItem,
+    TodoListEntity,
+    TodoListEntityFeature,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -30,6 +34,11 @@ class MentalLoadTodoList(TodoListEntity):
     """Representation of the mental load todo list."""
 
     _attr_has_entity_name = True
+    _attr_supported_features = (
+        TodoListEntityFeature.CREATE_TODO
+        | TodoListEntityFeature.UPDATE_TODO
+        | TodoListEntityFeature.DELETE_TODO
+    )
 
     def __init__(self, manager: MentalLoadTaskManager, entry: ConfigEntry) -> None:
         self._manager = manager

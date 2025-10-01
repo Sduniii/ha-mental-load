@@ -263,6 +263,29 @@ class MentalLoadTaskManager:
                 )
         self._notify_listeners()
 
+    async def async_mark_in_progress(self, uid: str) -> None:
+        """Mark a task as in progress."""
+
+        stored = self._tasks.get(uid)
+        if not stored:
+            _LOGGER.debug("Unknown task %s", uid)
+            return
+
+        if stored.item.status == TodoItemStatus.IN_PROGRESS:
+            return
+
+        stored.item = replace(stored.item, status=TodoItemStatus.IN_PROGRESS)
+
+        if not stored.is_parent:
+            parent_uid = (stored.item.extra or {}).get(ATTR_PARENT_UID)
+            if parent_uid and (parent := self._tasks.get(parent_uid)):
+                parent.item = replace(
+                    parent.item,
+                    status=self._derive_parent_status_from_children(parent_uid),
+                )
+
+        self._notify_listeners()
+
     def _derive_parent_status(self, tasks) -> TodoItemStatus:
         if not tasks:
             return TodoItemStatus.NEEDS_ACTION

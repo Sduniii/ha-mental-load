@@ -27,6 +27,7 @@ DATA_COORDINATOR = "coordinator"
 DATA_UNSUB_UPDATE_LISTENER = "update_listener"
 
 SERVICE_ADD_TASK = "add_manual_task"
+SERVICE_MARK_IN_PROGRESS = "mark_task_in_progress"
 
 ATTR_SOURCE = "source"
 ATTR_PARENT_UID = "parent_uid"
