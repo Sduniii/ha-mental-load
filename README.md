@@ -23,8 +23,12 @@ Dieses Projekt stellt eine benutzerdefinierte Home-Assistant-Integration bereit,
 1. Öffne HACS in Home Assistant und wähle **Integrationen**.
 2. Klicke rechts oben auf die drei Punkte und wähle **Benutzerdefiniertes Repository**.
 3. Gib die URL dieses GitHub-Repositories an und wähle als Kategorie **Integration**.
-4. Nach dem Hinzufügen erscheint *Mental Load Assistant* als installierbare Integration in HACS. Installiere sie und starte Home Assistant neu.
-5. Richte die Integration anschließend wie oben beschrieben ein.
+4. Stelle sicher, dass du ein getaggtes Release (z.B. `v0.2.0` oder neuer) auswählst – reine Commit-Stände wie `62157c0` können von HACS nicht verarbeitet werden.
+5. Nach dem Hinzufügen erscheint *Mental Load Assistant* als installierbare Integration in HACS. Installiere sie und starte Home Assistant neu.
+6. Richte die Integration anschließend wie oben beschrieben ein.
+
+> [!IMPORTANT]
+> HACS benötigt veröffentlichte Releases, um Updates nachzuverfolgen. Verwende daher immer eine Release-Version und nicht einzelne Commit-Archive.
 
 ## Optionen
 
