@@ -1,11 +1,9 @@
 {
-  "domain": "mental_load_assistant",
-  "name": "Mental Load Assistant",
-  "codeowners": ["@openai"],
-  "config_flow": true,
-  "dependencies": ["calendar", "todo"],
-  "documentation": "https://github.com/openai/mental-load-list",
+  "domain": "mental_load",
+  "name": "Mental load Assistant",
+  "documentation": "https://github.com/Sduniii/mental-load",
+  "issue_tracker": "https://github.com/Sduniii/mental-load/issues",
+  "codeowners": ["@Sduniii"],
   "iot_class": "cloud_polling",
-  "requirements": [],
-  "version": "0.2.0"
+  "requirements": []
 }
